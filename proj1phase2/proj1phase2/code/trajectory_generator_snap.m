@@ -6,6 +6,7 @@ seg_num = size(path,1) - 1;
 seg_time = total_time/seg_num;
 T = seg_time;
 segment = floor(t/seg_time)+1;
+% IF time exceed total time
 if segment+1>size(path,1)
     x_des = path(size(path,1),1) ;
     vx_des =0;

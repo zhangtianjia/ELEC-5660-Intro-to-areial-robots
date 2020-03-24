@@ -83,7 +83,9 @@ thpz       = [];
 ehpx       = [];
 ehpy       = [];
 ehpz       = [];
-
+global e
+e = zeros(6,size(0:cstep:time_tol,2));
+e_count =0;
 
 % Start Simulation run_trajectory_readonly
 disp('Start Simulation ...');
@@ -91,7 +93,7 @@ while (1)
     
     % External disturbance
     Fd = randn(3,1) * fnoise;
-    
+    e_count = e_count + 1;
     % Run simulation for cstep
     timeint = time:tstep:time+cstep;
     [~, xsave] = ode45(@(t, s) quadEOM_readonly(t, s, F, M, Fd), timeint', true_s);
@@ -99,6 +101,7 @@ while (1)
     time = time + cstep;
     
     des_s = trajectory_generator(time);
+    e(:,e_count) = des_s(1:6) - true_s(1:6);
     [F,M] = controller(time, true_s, des_s);
     
     if time >= time_tol
